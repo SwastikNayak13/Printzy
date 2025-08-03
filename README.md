@@ -13,20 +13,20 @@ Here is a showcase of the app's user flow:
 
 | Step 1: Getting Started | Step 2: Book Options |
 | :---: | :---: |
-| [cite\_start] [cite: 1] | [cite\_start] [cite: 2] |
+| ![Getting Started Screen](screenshots/screen_01_start.png) | ![Book Options Screen](screenshots/screen_02_options.png) |
 
 | Step 3: File Upload | Step 4: Order Summary |
 | :---: | :---: |
-| [cite\_start] [cite: 4] | [cite\_start] [cite: 6] |
+| ![File Upload Screen](screenshots/screen_03_upload.png) | ![Order Summary Screen](screenshots/screen_04_summary.png) |
 
-| Step 5: Confirmation | Admin: Order List |
+| Step 5: Confirmation |
 | :---: | :---: |
-| [cite\_start] [cite: 7] | [cite\_start] [cite: 8] |
+| ![Confirmation Screen](screenshots/screen_05_confirmation.png) |
 
 ## ✨ Features
 
   * **Multi-Step Ordering Process:** A guided 5-step workflow for a smooth user experience.
-  * [cite\_start]**Dynamic UI:** The interface intelligently updates based on user selections (e.g., showing "Book Cover" options only when "Book" is the selected job type). [cite: 2, 3]
+  * **Dynamic UI:** The interface intelligently updates based on user selections (e.g., showing "Book Cover" options only when "Book" is the selected job type). [cite: 2, 3]
   * **State Management:** Utilizes `ViewModel` to persist user selections and order data across all screens, ensuring data integrity throughout the navigation flow.
   * **Reusable Components:** Built with a focus on creating modular and reusable UI components, such as custom buttons and input fields, to maintain a consistent design and clean codebase.
   * **Modern UI with Jetpack Compose:** The entire UI is built declaratively with Jetpack Compose, without using traditional XML layouts.
