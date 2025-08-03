@@ -20,7 +20,7 @@ Here is a showcase of the app's user flow:
 | ![File Upload Screen](screenshots/screen_03_upload.png) | ![Order Summary Screen](screenshots/screen_04_summary.png) |
 
 | Step 5: Confirmation |
-| :---: | :---: |
+| :---: |
 | ![Confirmation Screen](screenshots/screen_05_confirmation.png) |
 
 ## ✨ Features
