@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Printzy — Project Report</title>
+  <style>
+    :root {
+      --primary: #0a66ff;
+      --ink: #111827;
+      --muted: #4b5563;
+      --bg: #f9fbfd;
+      --card: #ffffff;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    header h1 {
+      margin: 0 0 4px;
+      font-size: 32px;
+      letter-spacing: -0.02em;
+    }
+    header p {
+      margin: 0;
+      color: var(--muted);
+    }
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 18px 0;
+    }
+    h2 { font-size: 22px; margin: 0 0 12px; }
+    h3 { font-size: 18px; margin: 16px 0 8px; }
+    ul { padding-left: 18px; }
+    code, kbd { background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    figure { margin: 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; }
+    figure img { display: block; width: 100%; height: auto; }
+    figure figcaption { padding: 8px 10px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.95em; }
+    .monospace { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #eef2ff; color: #3730a3; font-size: 12px; border: 1px solid #e0e7ff; }
+    .mermaid { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+    footer { color: var(--muted); font-size: 13px; margin: 24px 0; text-align: center; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Printzy — Project Report</h1>
+      <p class="muted">Single-activity app using Kotlin + Jetpack Compose</p>
+    </header>
+
+    <section>
+      <h2>Overview</h2>
+      <p>
+        Printzy is a single-activity Android app built with Kotlin and Jetpack Compose to simulate a print-on-demand ordering flow. Users choose a job type (Book/Document), configure print options, upload files (mock), review the order, and confirm.
+      </p>
+    </section>
+
+    <section>
+      <h2>User Flow</h2>
+      <ul>
+        <li><strong>Start</strong> → select job type</li>
+        <li><strong>Options</strong> → configure print settings (dynamic for Book)</li>
+        <li><strong>Upload</strong> → mock file upload UI</li>
+        <li><strong>Summary</strong> → review options + enter shipping</li>
+        <li><strong>Confirmation</strong> → success message and return to start</li>
+      </ul>
+      <div class="mermaid">
+        graph TD
+          start[GettingStarted] --> options[Options]
+          options --> upload[Upload]
+          upload --> summary[Summary]
+          summary --> confirmation[Confirmation]
+      </div>
+      <noscript>
+        <div class="pill">Mermaid disabled</div>
+        <pre class="monospace">GettingStarted → Options → Upload → Summary → Confirmation</pre>
+      </noscript>
+    </section>
+
+    <section>
+      <h2>Screens and Responsibilities</h2>
+      <ul>
+        <li><strong>GettingStarted</strong> (<span class="kbd">GettingStartedScreen.kt</span>): Choose job type; navigates to <code>options</code> and sets job type in shared state.</li>
+        <li><strong>Options</strong> (<span class="kbd">OptionsScreen.kt</span>): Dynamic options based on job type.
+          <ul>
+            <li>Book: Cover, Book Size, Print Option, Color, Orientation</li>
+            <li>Document: Print Option, Color, Orientation</li>
+          </ul>
+        </li>
+        <li><strong>Upload</strong> (<span class="kbd">UploadScreen.kt</span>): Shows a read-only summary of selections; displays one or two upload boxes depending on job type; navigates to <code>summary</code>.</li>
+        <li><strong>Summary</strong> (<span class="kbd">SummaryScreen.kt</span>): Order summary and shipping address form; navigates to <code>confirmation</code>.</li>
+        <li><strong>Confirmation</strong> (<span class="kbd">ConfirmationScreen.kt</span>): Final success screen with button to pop back to <code>start</code>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Architecture</h2>
+      <ul>
+        <li><strong>Pattern</strong>: MVVM-lite with a single shared <code>OrderViewModel</code>.</li>
+        <li><strong>Activity</strong>: <code>MainActivity</code> sets content, applies <code>PrintzyTheme</code>, and hosts a <code>NavHost</code> for composable destinations.</li>
+        <li><strong>State</strong>: <code>OrderViewModel</code> exposes <code>order: mutableStateOf(PrintOrder)</code> and mutation helpers.</li>
+        <li><strong>Navigation</strong>: Compose Navigation, routes: <code>start</code>, <code>options</code>, <code>upload</code>, <code>summary</code>, <code>confirmation</code>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Data &amp; State Flow</h2>
+      <ul>
+        <li><code>MainActivity</code> creates <code>OrderViewModel</code> and passes it to all screens via <code>PrintzyApp</code>.</li>
+        <li><code>GettingStarted</code> calls <code>setJobType(...)</code> before navigating to <code>options</code>.</li>
+        <li><code>Options</code> collects local UI selection state, then persists via <code>viewModel.setOptions(...)</code> and navigates to <code>upload</code>.</li>
+        <li><code>Upload</code> and <code>Summary</code> read from <code>viewModel.order.value</code> to render summaries.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>UI &amp; Theming</h2>
+      <ul>
+        <li><strong>Toolkit</strong>: Jetpack Compose (Material 3)</li>
+        <li><strong>Design</strong>: Simple, centered layouts; outlined cards and buttons; primary blue <code>#007BFF</code>; light neutrals.</li>
+        <li><strong>Reusability</strong>: <code>OptionGroup</code>, <code>SelectableButton</code>, <code>FileUploadBox</code>, and simple summary rows.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Dependencies &amp; Versions (key)</h2>
+      <ul>
+        <li><strong>Kotlin</strong>: 2.0.0</li>
+        <li><strong>Android Gradle Plugin</strong>: 8.7.3</li>
+        <li><strong>Compile SDK</strong>: 35; <strong>Target SDK</strong>: 34; <strong>Min SDK</strong>: 26</li>
+        <li><strong>Java/Kotlin target</strong>: Java 11, JVM target 11</li>
+        <li><strong>Compose BOM</strong>: 2024.04.01</li>
+        <li><strong>Material 3</strong>: androidx.compose.material3:material3</li>
+        <li><strong>Navigation Compose</strong>: 2.9.0</li>
+        <li><strong>ViewModel Compose</strong>: lifecycle-viewmodel-compose (2.9.1)</li>
+        <li><strong>Activity Compose</strong>: 1.10.1</li>
+        <li><strong>Core KTX</strong>: 1.16.0</li>
+        <li><strong>Material Icons Extended</strong>: 1.7.8</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Build &amp; Run</h2>
+      <ol>
+        <li>Open in Android Studio (latest stable).</li>
+        <li>Let Gradle sync; ensure an emulator or device is available.</li>
+        <li>Run the app; initial destination is <code>start</code>.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Screenshots</h2>
+      <div class="grid">
+        <figure>
+          <img src="screenshots/screen_01_start.png" alt="Getting Started Screen" />
+          <figcaption>Step 1: Getting Started</figcaption>
+        </figure>
+        <figure>
+          <img src="screenshots/screen_02_options.png" alt="Book Options Screen" />
+          <figcaption>Step 2: Book Options</figcaption>
+        </figure>
+        <figure>
+          <img src="screenshots/screen_03_upload.png" alt="File Upload Screen" />
+          <figcaption>Step 3: File Upload</figcaption>
+        </figure>
+        <figure>
+          <img src="screenshots/screen_04_summary.png" alt="Order Summary Screen" />
+          <figcaption>Step 4: Order Summary</figcaption>
+        </figure>
+        <figure>
+          <img src="screenshots/screen_05_confirmation.png" alt="Confirmation Screen" />
+          <figcaption>Step 5: Confirmation</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>Known Limitations</h2>
+      <ul>
+        <li>File selection is mocked; no real file I/O.</li>
+        <li>No input validation or persistence beyond in-memory <code>ViewModel</code> state.</li>
+        <li>Pricing and page counts are hard-coded examples.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Future Enhancements</h2>
+      <ul>
+        <li>Real file picking via Storage Access Framework and upload handling.</li>
+        <li>Backend integration for order submission and status (e.g., Retrofit/REST).</li>
+        <li>Authentication and order history.</li>
+        <li>Payment integration and proper pricing engine.</li>
+        <li>Form validation and error handling across screens.</li>
+      </ul>
+    </section>
+
+    <footer>
+      Generated from repository sources · <span class="pill">Printzy</span>
+    </footer>
+  </div>
+</body>
+</html>
